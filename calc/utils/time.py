@@ -1,8 +1,14 @@
-from datetime import date, time
+from datetime import date, time, timedelta
 
-def greenwich_sidereal_time(city : str, local_date : date, local_time : time):
+def greenwich_sidereal_time(city : tuple, local_date : date, local_time : time):
   # function based on: https://pages.astro.umd.edu/~jpha/GST_eqn.pdf
-  # adjust this function to account for which city is being observed from!
+  
+  # still need to account for timezones and daylight savings time!
+  longitude_deg = city[2]
+  if longitude_deg > 180:
+    longitude_deg = 180 - longitude_deg
+  local_time += timedelta(hours=(longitude_deg / 180) * 12)
+
   G = 6.5988098 # year 2000, calculated successively for each year until we have one for the current observation year, potentially storable
   for i in range(2000, local_date.year):
     day = 365
